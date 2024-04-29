@@ -11,6 +11,7 @@ configViewEngine(app);
 //define routes app
 route(app);
 
+//execute server
 app.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });
