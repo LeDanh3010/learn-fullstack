@@ -1,28 +1,72 @@
-// Get the client
-import mysql from "mysql2/promise";
+import {
+  createNewUser,
+  deleteUser,
+  displayData,
+  displayDataUpdate,
+  updateData,
+} from "../service/userService";
 
-class homePageController {
+class HomePageController {
+  async create(req, res, next) {
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    createNewUser(username, email, password);
+    res.redirect("/users");
+  }
+
   home(req, res, next) {
     res.render("home");
   }
+
   user(req, res, next) {
-    res.render("user");
+    displayData()
+      .then((dataUsers) => {
+        res.render("user", { dataUsers: dataUsers });
+      })
+      .catch(() => {
+        console.log(err);
+        res.status(500).send("An error occurred while fetching user data.");
+      });
   }
-  async create(req, res, next) {
-    const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      database: "fullstack",
-    });
-    try {
-      const [results, fields] = await connection.query(
-        "SELECT * FROM `users` "
-      );
-      console.log("connect to database success", results); // results contains rows returned by server
-    } catch (err) {
-      console.log("connect to database failed", err);
-    }
+
+  delete(req, res, next) {
+    deleteUser(req.params.id)
+      .then(() => {
+        res.redirect("/users");
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("An error occurred while deleting user data.");
+      });
+  }
+
+  showUpdate(req, res, next) {
+    displayDataUpdate(req.params.id)
+      .then((results) => {
+        const [data] = results;
+        res.render("update", { data: data });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("An error occurred while fetching user data.");
+      });
+  }
+
+  update(req, res, next) {
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    updateData(req.params.id, username, email, password)
+      .then(() => {
+        res.redirect("/users");
+      })
+      .catch(() => {
+        console.log(err);
+        res.status(500).send("An error occurred while updating user data.");
+      });
   }
 }
-const homeController = new homePageController();
+
+const homeController = new HomePageController();
 export default homeController;
