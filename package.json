@@ -1,18 +1,17 @@
 {
   "name": "fullstack",
   "version": "1.0.0",
-  "description": "nodejs react",
+  "description": "learn fullstack",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --inspect --exec babel-node src/server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "anodev",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.24.4",
+    "@babel/core": "^7.24.5",
     "@babel/node": "^7.23.9",
-    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-env": "^7.24.5",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "dotenv": "^16.4.5",
