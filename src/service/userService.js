@@ -1,4 +1,4 @@
-import { query } from "../configs/Models/DB";
+import { query } from "../config/models/DB";
 import bcrypt from "bcryptjs";
 
 const saltRounds = 10;
