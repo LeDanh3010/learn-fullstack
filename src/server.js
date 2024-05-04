@@ -1,6 +1,8 @@
 import express from "express";
 import configViewEngine from "./config/viewEngines/viewEngine";
 import route from "./routes/index";
+import connectToDatabase from "./config/DB";
+
 require("dotenv").config();
 
 //define express app
@@ -13,6 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 
 //define config view engine
 configViewEngine(app);
+
+//authenticate
+connectToDatabase();
 
 //define routes app
 route(app);

@@ -1,17 +1,11 @@
-import {
-  createNewUser,
-  deleteUser,
-  displayData,
-  displayDataUpdate,
-  updateData,
-} from "../service/userService";
+import { handleServices } from "../service/userService";
 
 class HomePageController {
   async create(req, res, next) {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
-    createNewUser(username, email, password);
+    handleServices.createNewUser(username, email, password);
     res.redirect("/users");
   }
 
@@ -20,7 +14,8 @@ class HomePageController {
   }
 
   user(req, res, next) {
-    displayData()
+    handleServices
+      .displayUserData()
       .then((dataUsers) => {
         res.render("user", { dataUsers: dataUsers });
       })
@@ -31,7 +26,8 @@ class HomePageController {
   }
 
   delete(req, res, next) {
-    deleteUser(req.params.id)
+    handleServices
+      .deleteUser(req.params.id)
       .then(() => {
         res.redirect("/users");
       })
@@ -42,10 +38,10 @@ class HomePageController {
   }
 
   showUpdate(req, res, next) {
-    displayDataUpdate(req.params.id)
+    handleServices
+      .displayUpdateData(req.params.id)
       .then((results) => {
-        const [data] = results;
-        res.render("update", { data: data });
+        res.render("update", { data: results });
       })
       .catch((err) => {
         console.log(err);
@@ -57,7 +53,8 @@ class HomePageController {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
-    updateData(req.params.id, username, email, password)
+    handleServices
+      .updateData(req.params.id, username, email, password)
       .then(() => {
         res.redirect("/users");
       })
