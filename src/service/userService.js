@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from "../models/index";
+import { name } from "ejs";
 // import mysql from "mysql2/promise";
 // import bluebird from "bluebird";
 
@@ -44,7 +45,37 @@ class handleService {
 
   async displayUserData() {
     try {
-      const users = await db.User.findAll();
+      // const users = await db.User.findAll();
+      const users = await db.User.findAll({
+        nest: true,
+        raw: true,
+        attributes: ["id", "username", "email"],
+        include: {
+          attributes: ["id", "name", "description"],
+          model: db.Group,
+          required: true,
+        },
+      });
+      const roles = await db.Role.findAll({
+        nest: true,
+        raw: true,
+        attributes: ["id", "url", "description"],
+        include: {
+          model: db.Group,
+          required: true,
+          attributes: ["id", "name", "description"],
+          through: {
+            attributes: [],
+          },
+        },
+      });
+      // const group = await db.Group.findAll({
+      //   where: { id: 2 },
+      //   include: db.User,
+      // });
+      console.log("print user", users);
+      console.log("print role", roles);
+      // console.log("print group", group);
       return users;
 
       //way use with mysql
