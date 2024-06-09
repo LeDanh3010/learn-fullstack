@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from "../models/index";
-import { name } from "ejs";
+
 // import mysql from "mysql2/promise";
 // import bluebird from "bluebird";
 
