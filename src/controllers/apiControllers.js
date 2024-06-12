@@ -3,23 +3,42 @@ import { userApiServices } from "../service/userApiService";
 class apiController {
   async read(req, res) {
     try {
-      const userResults = await userApiServices.getUsers();
-      console.log(userResults);
+      const page = parseInt(req.query.page);
+      const pageSize = parseInt(req.query.pageSize);
+      const offset = (page - 1) * pageSize;
+      const limit = pageSize;
+      const paginationResults = await userApiServices.getUserPagination(
+        offset,
+        limit
+      );
+      if (!paginationResults) {
+        return res.status(404).json({ message: "No users found" });
+      }
       return res.status(200).json({
-        users: userResults.DT,
-        message: userResults.message,
-        DE: userResults.DE,
+        users: paginationResults.DT,
+        message: paginationResults.message,
+        DE: paginationResults.DE,
+        totalPage: paginationResults.totalPages,
       });
+
+      //const userResults = await userApiServices.getUsers();
+      //console.log(userResults);
+
+      // return res.status(200).json({
+      //   users: userResults.DT,
+      //   message: userResults.message,
+      //   DE: userResults.DE,
+      // });
     } catch (e) {
       console.log(e);
     }
   }
 
-  async create(res, req) {}
+  async create(req, res) {}
 
-  async update(res, req) {}
+  async update(req, res) {}
 
-  async destroy(res, req) {}
+  async destroy(req, res) {}
 }
 const apiControllers = new apiController();
 export default apiControllers;

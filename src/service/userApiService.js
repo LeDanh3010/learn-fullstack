@@ -1,4 +1,3 @@
-import { raw } from "mysql2";
 import db from "../models";
 
 class userApiService {
@@ -22,6 +21,28 @@ class userApiService {
     } catch (e) {
       console.log(e);
     }
+  }
+  async getUserPagination(offset, limit) {
+    const { count, rows } = await db.User.findAndCountAll({
+      raw: true,
+      nest: true,
+      offset: offset,
+      limit: limit,
+      attributes: ["id", "username", "email"],
+      include: {
+        attributes: ["id", "name", "description"],
+        model: db.Group,
+      },
+      order: [["username", "ASC"]],
+    });
+    const totalPages = Math.ceil(count / limit);
+    return {
+      DT: rows,
+      DE: "0",
+      totalItems: count,
+      totalPages: totalPages,
+      message: "success",
+    };
   }
 }
 
