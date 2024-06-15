@@ -20,15 +20,6 @@ class apiController {
         DE: paginationResults.DE,
         totalPage: paginationResults.totalPages,
       });
-
-      //const userResults = await userApiServices.getUsers();
-      //console.log(userResults);
-
-      // return res.status(200).json({
-      //   users: userResults.DT,
-      //   message: userResults.message,
-      //   DE: userResults.DE,
-      // });
     } catch (e) {
       console.log(e);
     }
@@ -38,7 +29,17 @@ class apiController {
 
   async update(req, res) {}
 
-  async destroy(req, res) {}
+  async destroy(req, res) {
+    try {
+      const deleteResults = await userApiServices.destroyUser(req.body.id);
+      return res.status(200).json({
+        message: deleteResults.message,
+        DE: deleteResults.DE,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 const apiControllers = new apiController();
 export default apiControllers;

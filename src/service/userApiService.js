@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import db from "../models";
 
 class userApiService {
@@ -43,6 +44,22 @@ class userApiService {
       totalPages: totalPages,
       message: "success",
     };
+  }
+  async destroyUser(id) {
+    try {
+      const users = await db.User.destroy({
+        where: {
+          id: id,
+        },
+        force: true,
+      });
+      return {
+        message: "Delete success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
