@@ -14,6 +14,7 @@ class apiController {
       if (!paginationResults) {
         return res.status(404).json({ message: "No users found" });
       }
+
       return res.status(200).json({
         users: paginationResults.DT,
         message: paginationResults.message,
@@ -22,6 +23,9 @@ class apiController {
       });
     } catch (e) {
       console.log(e);
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
     }
   }
   async getGroup(req, res) {
@@ -34,6 +38,25 @@ class apiController {
       });
     } catch (e) {
       console.log(e);
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+  async getEdit(req, res) {
+    try {
+      const editResults = await userApiServices.getUserToDisplay(req.params.id);
+
+      return res.status(200).json({
+        DT: editResults.DT,
+        message: editResults.message,
+        DE: editResults.DE,
+      });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
     }
   }
   async create(req, res) {
@@ -51,6 +74,7 @@ class apiController {
         });
       } else {
         const createResults = await userApiServices.createUser(req.body);
+
         return res.status(200).json({
           message: createResults.message,
           DE: createResults.DE,
@@ -59,20 +83,56 @@ class apiController {
       }
     } catch (e) {
       console.log(e);
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
     }
   }
 
-  async update(req, res) {}
+  async update(req, res) {
+    try {
+      const { username, email, phone, password, address, sex, groupId } =
+        req.body;
+      console.log(groupId);
+      if (!groupId) {
+        return res.status(200).json({
+          message: "Missing group field",
+          DE: "1",
+        });
+      }
+      const updateResults = await userApiServices.updateUser(req.params.id, {
+        username,
+        email,
+        phone,
+        password,
+        address,
+        sex,
+        groupId,
+      });
+      return res.status(200).json({
+        message: updateResults.message,
+        DE: updateResults.DE,
+      });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
 
   async destroy(req, res) {
     try {
       const deleteResults = await userApiServices.destroyUser(req.body.id);
+
       return res.status(200).json({
         message: deleteResults.message,
         DE: deleteResults.DE,
       });
     } catch (e) {
-      console.log(e);
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
     }
   }
 }

@@ -21,20 +21,59 @@ class userApiService {
       };
     } catch (e) {
       console.log(e);
+      return {
+        message: "getUser error",
+        DE: "1",
+        error: e,
+      };
     }
   }
   async getGroup() {
-    const groups = await db.Group.findAll({
-      raw: true,
-      nest: true,
-      attributes: ["id", "name", "description"],
-    });
-    return {
-      DT: groups,
-      message: "success",
-      DE: "0",
-    };
+    try {
+      const groups = await db.Group.findAll({
+        raw: true,
+        nest: true,
+        attributes: ["id", "name", "description"],
+      });
+      return {
+        DT: groups,
+        message: "success",
+        DE: "0",
+      };
+    } catch {
+      console.log(e);
+      return {
+        message: "getGroup error",
+        DE: "1",
+        error: e,
+      };
+    }
   }
+
+  async getUserToDisplay(id) {
+    try {
+      const user = await db.User.findOne({
+        raw: true,
+        nest: true,
+        where: {
+          id: id,
+        },
+      });
+      return {
+        DT: user,
+        message: "success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "getUserToDisplay error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
+
   async getUserPagination(offset, limit) {
     try {
       const { count, rows } = await db.User.findAndCountAll({
@@ -47,7 +86,7 @@ class userApiService {
           attributes: ["id", "name", "description"],
           model: db.Group,
         },
-        order: [["username", "ASC"]],
+        order: [["id", "ASC"]],
       });
       const totalPages = Math.ceil(count / limit);
       return {
@@ -59,6 +98,11 @@ class userApiService {
       };
     } catch (e) {
       console.log(e);
+      return {
+        message: "getUserPagination error",
+        DE: "1",
+        error: e,
+      };
     }
   }
   async createUser(user) {
@@ -111,22 +155,75 @@ class userApiService {
       };
     } catch (e) {
       console.log(e);
+      return {
+        message: "createUser error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
+  async updateUser(id, user) {
+    try {
+      const { username, address, sex, groupId } = user;
+
+      //query database
+      const [updateResult] = await db.User.update(
+        {
+          username,
+          address,
+          sex,
+          groupId,
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+      if (updateResult === 0) {
+        return {
+          message: "Update failed",
+          DE: "1",
+        };
+      }
+      return {
+        message: "Update success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "updateUser error",
+        DE: "1",
+        error: e,
+      };
     }
   }
   async destroyUser(id) {
     try {
-      const users = await db.User.destroy({
+      const deleteUser = await db.User.destroy({
         where: {
           id: id,
         },
         force: true,
       });
+      if (deleteUser === 0) {
+        return {
+          message: "Delete failed",
+          DE: "1",
+        };
+      }
       return {
         message: "Delete success",
         DE: "0",
       };
     } catch (e) {
       console.log(e);
+      return {
+        message: "deleteUser error",
+        DE: "1",
+        error: e.message,
+      };
     }
   }
 }
