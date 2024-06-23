@@ -55,6 +55,7 @@ const registerHandle = async (dataUsers) => {
       email: dataUsers.email,
       phone: dataUsers.phone,
       password: hashPass,
+      groupId: 4,
     });
     return {
       message: "Register success",

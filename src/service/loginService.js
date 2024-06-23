@@ -1,6 +1,9 @@
 import { Op } from "sequelize";
 import db from "../models";
 import bcrypt from "bcryptjs";
+import getGroupWithRole from "./jwtService";
+import { createJWT } from "../middleware/jwtConfig";
+require("dotenv").config();
 
 const loginService = async (rawData) => {
   try {
@@ -21,10 +24,20 @@ const loginService = async (rawData) => {
     if (user) {
       const isPassword = checkPassword(rawData.password, user.password);
       if (isPassword) {
+        const groupWithRole = await getGroupWithRole(user);
+        const expiresIn = process.env.JWT_EXP;
+        const payLoad = {
+          email: user.email,
+          groupWithRole,
+        };
+        let token = createJWT(payLoad, expiresIn);
         return {
           message: "Login success",
           DE: "0",
-          data: user,
+          DT: {
+            access_token: token,
+            groupWithRole,
+          },
         };
       }
     }

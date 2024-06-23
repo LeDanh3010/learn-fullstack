@@ -10,9 +10,13 @@ const loginController = async (req, res, next) => {
       });
     } else {
       const loginServiceResults = await loginService(req.body);
+      res.cookie("jwt", loginServiceResults.DT.access_token, {
+        httpOnly: true,
+      });
       return res.status(200).json({
         message: loginServiceResults.message,
         DE: loginServiceResults.DE,
+        DT: loginServiceResults.DT,
       });
     }
   } catch (e) {

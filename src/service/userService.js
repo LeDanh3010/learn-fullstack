@@ -73,8 +73,8 @@ class handleService {
       //   where: { id: 2 },
       //   include: db.User,
       // });
-      console.log("print user", users);
-      console.log("print role", roles);
+      // console.log("print user", users);
+      // console.log("print role", roles);
       // console.log("print group", group);
       return users;
 
