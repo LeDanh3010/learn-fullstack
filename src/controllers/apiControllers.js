@@ -45,7 +45,7 @@ class apiController {
   }
   async getEdit(req, res) {
     try {
-      const editResults = await userApiServices.getUserToDisplay(req.params.id);
+      const editResults = await userApiServices.getUserToDisplay(req.query.id);
 
       return res.status(200).json({
         DT: editResults.DT,
@@ -91,8 +91,9 @@ class apiController {
 
   async update(req, res) {
     try {
+      console.log(req.body.updateUser);
       const { username, email, phone, password, address, sex, groupId } =
-        req.body;
+        req.body.updateUser;
       console.log(groupId);
       if (!groupId) {
         return res.status(200).json({
@@ -100,7 +101,7 @@ class apiController {
           DE: "1",
         });
       }
-      const updateResults = await userApiServices.updateUser(req.params.id, {
+      const updateResults = await userApiServices.updateUser(req.body.id, {
         username,
         email,
         phone,
@@ -135,6 +136,54 @@ class apiController {
       });
     }
   }
+
+  async userAccount(req, res) {
+    try {
+      return res.status(200).json({
+        message: "get userAccount success",
+        DE: "0",
+        DT: {
+          access_token: req.token,
+          email: req.user.email,
+          user: req.user.user,
+          groupWithRole: req.user.groupWithRole,
+        },
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+
+  async logout(req, res) {
+    try {
+      res.clearCookie("jwt");
+      return res.status(200).json({
+        message: "logout success",
+        DE: "0",
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+
+  async createRole(req, res) {
+    try {
+      const createRoleResults = await userApiServices.createRole(req.body);
+      return res.status(200).json({
+        message: createRoleResults.message,
+        DE: createRoleResults.DE,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
 }
+
 const apiControllers = new apiController();
 export default apiControllers;

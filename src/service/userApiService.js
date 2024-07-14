@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from "../models";
+import { raw } from "mysql2";
 
 class userApiService {
   async getUsers() {
@@ -223,6 +224,51 @@ class userApiService {
         message: "deleteUser error",
         DE: "1",
         error: e.message,
+      };
+    }
+  }
+
+  async createRole(data) {
+    const bulkData = data.map(({ url, description }) => ({
+      url,
+      description,
+    }));
+    const check = async () => {
+      try {
+        const roleData = await db.Role.findAll({
+          raw: true,
+          attributes: ["url", "description"],
+        });
+        const isCheck = roleData.some((item1) =>
+          bulkData.find((item2) => item1.url === item2.url)
+        );
+        return isCheck;
+      } catch (e) {
+        return {
+          message: "Something wrong in check username and email",
+          DE: "1",
+        };
+      }
+    };
+    try {
+      const checkRole = await check();
+      if (checkRole) {
+        return {
+          message: "Role already existed",
+          DE: "1",
+        };
+      }
+      await db.Role.bulkCreate(bulkData);
+      return {
+        message: "Create role success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "createRole error",
+        DE: "1",
+        error: e,
       };
     }
   }

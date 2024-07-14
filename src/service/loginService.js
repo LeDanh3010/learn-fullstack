@@ -3,6 +3,7 @@ import db from "../models";
 import bcrypt from "bcryptjs";
 import getGroupWithRole from "./jwtService";
 import { createJWT } from "../middleware/jwtConfig";
+
 require("dotenv").config();
 
 const loginService = async (rawData) => {
@@ -20,7 +21,7 @@ const loginService = async (rawData) => {
     const checkPassword = (rawPass, hashPass) => {
       return bcrypt.compareSync(rawPass, hashPass);
     };
-
+    console.log("user", user);
     if (user) {
       const isPassword = checkPassword(rawData.password, user.password);
       if (isPassword) {
@@ -28,6 +29,7 @@ const loginService = async (rawData) => {
         const expiresIn = process.env.JWT_EXP;
         const payLoad = {
           email: user.email,
+          user: user.username,
           groupWithRole,
         };
         let token = createJWT(payLoad, expiresIn);
@@ -37,6 +39,8 @@ const loginService = async (rawData) => {
           DT: {
             access_token: token,
             groupWithRole,
+            user: user.username,
+            email: user.email,
           },
         };
       }

@@ -2,6 +2,7 @@ import loginService from "../service/loginService";
 
 const loginController = async (req, res, next) => {
   try {
+    console.log("req body", req.body);
     const { emailOrPhone, password } = req.body;
     if (!emailOrPhone || !password) {
       return res.status(200).json({
@@ -10,9 +11,12 @@ const loginController = async (req, res, next) => {
       });
     } else {
       const loginServiceResults = await loginService(req.body);
-      res.cookie("jwt", loginServiceResults.DT.access_token, {
-        httpOnly: true,
-      });
+      if (loginServiceResults?.DT?.access_token) {
+        res.cookie("jwt", loginServiceResults.DT.access_token, {
+          httpOnly: true,
+          maxAge: 20 * 1000,
+        });
+      }
       return res.status(200).json({
         message: loginServiceResults.message,
         DE: loginServiceResults.DE,
