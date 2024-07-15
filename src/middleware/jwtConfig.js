@@ -1,7 +1,14 @@
 import jwt from "jsonwebtoken";
 require("dotenv").config();
 
-const nonSecurePaths = ["/", "/v1/register", "/v1/login", "/v1/logout"];
+const nonSecurePaths = [
+  "/",
+  "/v1/register",
+  "/v1/login",
+  "/v1/logout",
+  "/v1/role/getRole",
+  "/v1/role/deleteRole",
+];
 
 const createJWT = (payload, expiresIn) => {
   const key = process.env.JWT_KEY;
@@ -43,7 +50,7 @@ const checkUserWithJwt = (req, res, next) => {
   const cookies = req.cookies;
 
   const headerToken = extractToken(req);
-  console.log("header Token", headerToken);
+
   const token = cookies?.jwt || headerToken;
 
   if (token) {
@@ -71,7 +78,7 @@ const checkUserPermission = (req, res, next) => {
     return next();
   if (req.user) {
     const { Roles } = req.user.groupWithRole;
-    console.log("roles", Roles);
+
     if (!Roles || Roles.length === 0) {
       return res.status(403).json({
         message: "Access denied",
@@ -81,8 +88,7 @@ const checkUserPermission = (req, res, next) => {
     }
     const currentPath = req.path;
     const accessControl = Roles.some((item) => currentPath === item.url);
-    console.log("current Path", currentPath);
-    console.log("access control", accessControl);
+
     if (!accessControl) {
       return res.status(403).json({
         message: "Access denied",

@@ -272,6 +272,56 @@ class userApiService {
       };
     }
   }
+
+  async getRolePagination(offset, limit) {
+    try {
+      const { count, rows } = await db.Role.findAndCountAll({
+        raw: true,
+        nest: true,
+        offset: offset,
+        limit: limit,
+        attributes: ["id", "url", "description"],
+        order: [["id", "ASC"]],
+      });
+
+      return {
+        DT: rows,
+        DE: "0",
+        totalItems: count,
+        totalPages: Math.ceil(count / limit),
+        message: "get role success",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "getRolePagination error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
+
+  async deleteRole(id) {
+    try {
+      await db.Role.destroy({
+        where: {
+          id: id,
+        },
+        force: true,
+      });
+      return {
+        message: "Delete role success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "deleteRole error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
 }
 
 export const userApiServices = new userApiService();

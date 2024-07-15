@@ -21,7 +21,7 @@ const loginService = async (rawData) => {
     const checkPassword = (rawPass, hashPass) => {
       return bcrypt.compareSync(rawPass, hashPass);
     };
-    console.log("user", user);
+
     if (user) {
       const isPassword = checkPassword(rawData.password, user.password);
       if (isPassword) {

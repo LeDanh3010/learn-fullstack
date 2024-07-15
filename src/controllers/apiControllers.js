@@ -91,7 +91,6 @@ class apiController {
 
   async update(req, res) {
     try {
-      console.log(req.body.updateUser);
       const { username, email, phone, password, address, sex, groupId } =
         req.body.updateUser;
       console.log(groupId);
@@ -176,6 +175,45 @@ class apiController {
       return res.status(200).json({
         message: createRoleResults.message,
         DE: createRoleResults.DE,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+
+  async getRole(req, res) {
+    try {
+      const page = parseInt(req.query.page) || 0;
+      const pageSize = parseInt(req.query.pageSize) || 4;
+      const offset = (page - 1) * pageSize;
+      const limit = pageSize;
+
+      const getRoleResults = await userApiServices.getRolePagination(
+        offset,
+        limit
+      );
+
+      return res.status(200).json({
+        DT: getRoleResults.DT,
+        message: getRoleResults.message,
+        DE: getRoleResults.DE,
+        totalPage: getRoleResults.totalPages,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+
+  async deleteRole(req, res) {
+    try {
+      const deleteRoleResults = await userApiServices.deleteRole(req.body.id);
+      return res.status(200).json({
+        message: deleteRoleResults.message,
+        DE: deleteRoleResults.DE,
       });
     } catch (e) {
       return res.status(500).json({

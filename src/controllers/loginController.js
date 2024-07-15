@@ -2,7 +2,6 @@ import loginService from "../service/loginService";
 
 const loginController = async (req, res, next) => {
   try {
-    console.log("req body", req.body);
     const { emailOrPhone, password } = req.body;
     if (!emailOrPhone || !password) {
       return res.status(200).json({

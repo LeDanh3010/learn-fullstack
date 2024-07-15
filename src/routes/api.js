@@ -29,6 +29,12 @@ api.get("/v1/account", apiControllers.userAccount);
 api.get("/v1/logout", apiControllers.logout);
 
 //api create role
-api.post("/v1/createRole", apiControllers.createRole);
+api.post("/v1/role/createRole", apiControllers.createRole);
+
+//api show role
+api.get("/v1/role/getRole", apiControllers.getRole);
+
+//api delete role
+api.delete("/v1/role/deleteRole", apiControllers.deleteRole);
 
 export default api;
