@@ -37,4 +37,6 @@ api.get("/v1/role/getRole", apiControllers.getRole);
 //api delete role
 api.delete("/v1/role/deleteRole", apiControllers.deleteRole);
 
+//api edit role
+api.put("/v1/role/editRole", apiControllers.editRole);
 export default api;

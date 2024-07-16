@@ -322,6 +322,39 @@ class userApiService {
       };
     }
   }
+
+  async editRole(dataRole) {
+    try {
+      const [data] = await db.Role.update(
+        {
+          url: dataRole.data.url,
+          description: dataRole.data.description,
+        },
+        {
+          where: {
+            id: dataRole.id,
+          },
+        }
+      );
+      if (data === 0) {
+        return {
+          message: "Edit failed",
+          DE: "1",
+        };
+      }
+      return {
+        message: "Edit role success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "Edit role error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
 }
 
 export const userApiServices = new userApiService();

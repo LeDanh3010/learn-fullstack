@@ -221,6 +221,21 @@ class apiController {
       });
     }
   }
+
+  async editRole(req, res) {
+    try {
+      console.log("edit role", req.body);
+      const editRoleResults = await userApiServices.editRole(req.body);
+      return res.status(200).json({
+        message: editRoleResults.message,
+        DE: editRoleResults.DE,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
 }
 
 const apiControllers = new apiController();
