@@ -9,6 +9,8 @@ const nonSecurePaths = [
   "/v1/role/getRole",
   "/v1/role/deleteRole",
   "/v1/role/editRole",
+  "/v1/group/readGroup",
+  "/v1/group/getRoleInGroup",
 ];
 
 const createJWT = (payload, expiresIn) => {

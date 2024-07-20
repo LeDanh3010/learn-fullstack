@@ -224,11 +224,41 @@ class apiController {
 
   async editRole(req, res) {
     try {
-      console.log("edit role", req.body);
       const editRoleResults = await userApiServices.editRole(req.body);
       return res.status(200).json({
         message: editRoleResults.message,
         DE: editRoleResults.DE,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+
+  async readGroup(req, res) {
+    try {
+      const groupResults = await userApiServices.readGroupService();
+      console.log(groupResults);
+      return res.status(200).json({
+        DT: groupResults.DT,
+        message: groupResults.message,
+        DE: groupResults.DE,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
+
+  async getRoleInGroup(req, res) {
+    try {
+      const roleResults = await userApiServices.getRoleInGroup();
+      return res.status(200).json({
+        DT: roleResults.DT,
+        message: roleResults.message,
+        DE: roleResults.DE,
       });
     } catch (e) {
       return res.status(500).json({

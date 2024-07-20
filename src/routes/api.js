@@ -39,4 +39,11 @@ api.delete("/v1/role/deleteRole", apiControllers.deleteRole);
 
 //api edit role
 api.put("/v1/role/editRole", apiControllers.editRole);
+
+//api get group
+api.get("/v1/group/readGroup", apiControllers.readGroup);
+
+//api get role in group
+
+api.get("/v1/group/getRoleInGroup", apiControllers.getRoleInGroup);
 export default api;

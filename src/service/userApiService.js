@@ -355,6 +355,57 @@ class userApiService {
       };
     }
   }
+
+  async readGroupService() {
+    try {
+      const groupServices = await db.Group.findAll({
+        raw: true,
+        nest: true,
+        attributes: ["id", "name", "description"],
+        include: {
+          model: db.Role,
+          attributes: ["id", "url", "description"],
+          through: {
+            attributes: [],
+          },
+        },
+      });
+      return {
+        DT: groupServices,
+        message: "group and role get success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "readGroupService error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
+
+  async getRoleInGroup() {
+    try {
+      const rolesInGroup = await db.Role.findAll({
+        raw: true,
+        nest: true,
+        attributes: ["id", "url", "description"],
+      });
+      return {
+        DT: rolesInGroup,
+        message: "get role in group success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "getRoleInGroup error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
 }
 
 export const userApiServices = new userApiService();
