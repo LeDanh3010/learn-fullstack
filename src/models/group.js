@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Group.hasMany(models.User);
       Group.belongsToMany(models.Role, {
         through: "Group_role",
+        foreignKey: "groupId",
       });
     }
   }

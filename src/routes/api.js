@@ -44,6 +44,8 @@ api.put("/v1/role/editRole", apiControllers.editRole);
 api.get("/v1/group/readGroup", apiControllers.readGroup);
 
 //api get role in group
-
 api.get("/v1/group/getRoleInGroup", apiControllers.getRoleInGroup);
+
+//api post groupRole
+api.post("/v1/groupRole/createGroupRole", apiControllers.createGroupRole);
 export default api;

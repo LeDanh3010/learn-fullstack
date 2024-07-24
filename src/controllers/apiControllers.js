@@ -266,6 +266,21 @@ class apiController {
       });
     }
   }
+
+  async createGroupRole(req, res) {
+    try {
+      const createGroupRoleResults =
+        await userApiServices.createGroupRoleService(req.body);
+      return res.status(200).json({
+        message: createGroupRoleResults.message,
+        DE: createGroupRoleResults.DE,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: "Something wrong in server",
+      });
+    }
+  }
 }
 
 const apiControllers = new apiController();

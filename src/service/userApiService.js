@@ -366,7 +366,7 @@ class userApiService {
           model: db.Role,
           attributes: ["id", "url", "description"],
           through: {
-            attributes: [],
+            attributes: ["groupId"],
           },
         },
       });
@@ -401,6 +401,28 @@ class userApiService {
       console.log(e);
       return {
         message: "getRoleInGroup error",
+        DE: "1",
+        error: e,
+      };
+    }
+  }
+
+  async createGroupRoleService(data) {
+    try {
+      await db.Group_role.destroy({
+        where: {
+          groupId: data.groupId,
+        },
+      });
+      await db.Group_role.bulkCreate(data.roleId);
+      return {
+        message: "Create group role service success",
+        DE: "0",
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        message: "createGroupRoleService error",
         DE: "1",
         error: e,
       };
